@@ -21,8 +21,8 @@ jobs:
       uses: ./.github/actions/foundationdb
 
     - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
+      uses: actions-rs/toolchain@v1
+      with:
         toolchain: stable
         profile: minimal
 
