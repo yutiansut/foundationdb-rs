@@ -1,6 +1,11 @@
 const core = require('@actions/core');
 const os = require('os');
-const { execSync: exec } = require('child_process');
+const { execSync } = require('child_process');
+
+function exec(cmd) {
+    console.info(`> ${cmd}`);
+    execSync(cmd);
+}
 
 try {
     const version = core.getInput('version');

@@ -55,7 +55,12 @@ module.exports = require("os");
 
 const core = __webpack_require__(470);
 const os = __webpack_require__(87);
-const { execSync: exec } = __webpack_require__(129);
+const { execSync } = __webpack_require__(129);
+
+function exec(cmd) {
+    console.info(`> ${cmd}`);
+    execSync(cmd);
+}
 
 try {
     const version = core.getInput('version');
