@@ -13,13 +13,13 @@ try {
     let base_url = `https://www.foundationdb.org/downloads/${version}`;
     switch (os.platform()) {
         case 'linux': {
-            let client_url = `${base_url}/ubuntu/installers/foundationdb-clients_${version}_amd64.deb`;
+            let client_url = `${base_url}/ubuntu/installers/foundationdb-clients_${version}-1_amd64.deb`;
             exec(`curl -O ${client_url}`);
-            exec(`sudo dpkg -i foundationdb-clients_${version}_amd64.deb`);
+            exec(`sudo dpkg -i foundationdb-clients_${version}-1_amd64.deb`);
 
-            let server_url = `${base_url}/ubuntu/installers/foundationdb-server_${version}_amd64.deb`;
+            let server_url = `${base_url}/ubuntu/installers/foundationdb-server_${version}-1_amd64.deb`;
             exec(`curl -O ${server_url}`);
-            exec(`sudo dpkg -i foundationdb-server_${version}_amd64.deb`);
+            exec(`sudo dpkg -i foundationdb-server_${version}-1_amd64.deb`);
             break;
         }
         case 'darwin': {
