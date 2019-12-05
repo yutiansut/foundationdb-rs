@@ -9,7 +9,7 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
-  
+
     env:
       CARGO_INCREMENTAL: 0
 
@@ -33,7 +33,7 @@ jobs:
         profile: minimal
 
     - name: Build
-      run: cargo --color always build --verbose 
+      run: cargo --color always build --verbose
 
     - name: Run tests
       run: |
