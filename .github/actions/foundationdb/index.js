@@ -9,7 +9,7 @@ function exec(cmd) {
 
 try {
     const version = core.getInput('version');
-    console.log(`Installing foundationdb ${version}!`);
+    console.log(`Installing foundationdb ${version} for ${os.platform()}!`);
     let base_url = `https://www.foundationdb.org/downloads/${version}`;
     switch (os.platform()) {
         case 'linux': {
@@ -22,13 +22,13 @@ try {
             exec(`sudo dpkg -i foundationdb-server_${version}-1_amd64.deb`);
             break;
         }
-        case 'darwin': {
+        case 'win32': {
             let url = `${base_url}/windows/installers/foundationdb-${version}-x64.msi`;
             exec(`curl -O ${url}`);
             exec(`msiexec /i "foundationdb-${version}-x64.msi" /quiet /passive /norestart /log install.log`);
             break;
         }
-        case 'win32': {
+        case 'darwin': {
             let url = `${base_url}/macOS/installers/FoundationDB-${version}.pkg`;
             exec(`curl -O ${url}`);
             exec(`sudo installer -pkg FoundationDB-${version}.pkg -target /`);
