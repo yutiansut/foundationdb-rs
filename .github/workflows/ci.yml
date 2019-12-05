@@ -1,9 +1,11 @@
-name: Rust
+name: CI
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  rust:
+    name: Rust
+
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -43,3 +45,52 @@ jobs:
         cargo --color always test --manifest-path foundationdb/Cargo.toml --no-default-features --features fdb-6_0 --tests
         cargo --color always test --manifest-path foundationdb-bench/Cargo.toml
         cargo --color always run --manifest-path foundationdb/Cargo.toml --example class-scheduling
+
+  bindingtester:
+    name: Binding Tester
+    runs-on: ubuntu-latest
+
+    env:
+      CARGO_INCREMENTAL: 0
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v1
+
+    - name: Install FoundationDB
+      uses: ./.github/actions/foundationdb
+
+    - name: Install Rust toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+
+    - name: Run bindingtester
+      run: scripts/run_bindingtester.sh
+
+  lint:
+    name: Code coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install FoundationDB
+        uses: ./.github/actions/foundationdb
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features --no-fail-fast
+        env:
+          CARGO_INCREMENTAL: '0'
+          RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads'
+
+      - id: coverage
+        uses: actions-rs/grcov@v0.1
