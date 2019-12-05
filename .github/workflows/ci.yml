@@ -76,6 +76,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Install FoundationDB
+        uses: ./.github/actions/foundationdb
+
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -113,3 +116,8 @@ jobs:
 
       - id: coverage
         uses: actions-rs/grcov@v0.1
+
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ${{ steps.coverage.outputs.report }}
