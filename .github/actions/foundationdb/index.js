@@ -9,7 +9,7 @@ function exec(cmd) {
 
 try {
     const version = core.getInput('version');
-    console.log(`Installing foundationdb ${version} for ${os.platform()}!`);
+    console.log(`Installing foundationdb ${version} (${os.platform()})!`);
     let base_url = `https://www.foundationdb.org/downloads/${version}`;
     switch (os.platform()) {
         case 'linux': {
