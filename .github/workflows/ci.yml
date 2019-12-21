@@ -16,35 +16,35 @@ jobs:
       CARGO_INCREMENTAL: 0
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v1
 
-    - name: Install FoundationDB
-      uses: ./.github/actions/foundationdb
+      - name: Install FoundationDB
+        uses: ./.github/actions/foundationdb
 
-    - name: Install Clang
-      if: matrix.os == 'windows-latest'
-      run: |
-        curl -fsSL -o LLVM9.exe https://releases.llvm.org/9.0.0/LLVM-9.0.0-win64.exe
-        7z x LLVM9.exe -y -o"C:/Program Files/LLVM"
+      - name: Install Clang
+        if: matrix.os == 'windows-latest'
+        run: |
+          curl -fsSL -o LLVM9.exe https://releases.llvm.org/9.0.0/LLVM-9.0.0-win64.exe
+          7z x LLVM9.exe -y -o"C:/Program Files/LLVM"
 
-    - name: Install Rust toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
 
-    - name: Build
-      run: cargo --color always build --verbose
+      - name: Build
+        run: cargo --color always build --verbose
 
-    - name: Run tests
-      run: |
-        cargo --color always test --manifest-path foundationdb-sys/Cargo.toml
-        cargo --color always test --manifest-path foundationdb-gen/Cargo.toml
-        cargo --color always test --manifest-path foundationdb/Cargo.toml
-        cargo --color always test --manifest-path foundationdb/Cargo.toml --no-default-features --features fdb-6_0 --tests
-        cargo --color always test --manifest-path foundationdb-bench/Cargo.toml
-        cargo --color always run --manifest-path foundationdb/Cargo.toml --example class-scheduling
+      - name: Run tests
+        run: |
+          cargo -vv --color always test --manifest-path foundationdb-sys/Cargo.toml
+          cargo -vv --color always test --manifest-path foundationdb-gen/Cargo.toml
+          cargo -vv --color always test --manifest-path foundationdb/Cargo.toml
+          cargo -vv --color always test --manifest-path foundationdb/Cargo.toml --no-default-features --features fdb-6_0 --tests
+          cargo -vv --color always test --manifest-path foundationdb-bench/Cargo.toml
+          cargo -vv --color always run --manifest-path foundationdb/Cargo.toml --example class-scheduling
 
   bindingtester:
     name: Binding Tester
@@ -54,20 +54,20 @@ jobs:
       CARGO_INCREMENTAL: 0
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v1
 
-    - name: Install FoundationDB
-      uses: ./.github/actions/foundationdb
+      - name: Install FoundationDB
+        uses: ./.github/actions/foundationdb
 
-    - name: Install Rust toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
 
-    - name: Run bindingtester
-      run: scripts/run_bindingtester.sh
+      - name: Run bindingtester
+        run: scripts/run_bindingtester.sh
 
   lint:
     name: Rustfmt / Clippy
@@ -111,8 +111,8 @@ jobs:
           command: test
           args: --no-fail-fast
         env:
-          CARGO_INCREMENTAL: '0'
-          RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads'
+          CARGO_INCREMENTAL: "0"
+          RUSTFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
 
       - id: coverage
         uses: actions-rs/grcov@v0.1
